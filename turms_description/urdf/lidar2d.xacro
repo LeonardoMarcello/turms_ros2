@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+
+    <xacro:property name="servo_base_length" value="0.01"/>
+    <xacro:property name="servo_base_width" value="0.027"/>
+    <xacro:property name="servo_base_heigth" value="0.027"/>
+    
+    <xacro:property name="servo_stick_length" value="0.01"/>
+    <xacro:property name="servo_stick_width" value="0.027"/>
+    <xacro:property name="servo_stick_heigth" value="0.005"/>
+
+    <xacro:property name="ultrasonic_sensor_length" value="0.005"/>
+    <xacro:property name="ultrasonic_sensor_width" value="0.03"/>
+    <xacro:property name="ultrasonic_sensor_heigth" value="0.025"/>
+
+    <!-- SERVO -->
+
+    <joint name="servo_base_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="servo_base_frame"/>
+        <origin xyz="0 0 0.09" rpy="0 0 0"/>
+    </joint>
+
+    <link name="servo_base_frame">
+        <visual>
+            <geometry>
+                <!--<mesh filename="file:///$(find turms_description)/mesh/servo/motor.stl" scale ="0.001 0.001 0.001"/> -->  
+                <box size="${servo_base_length} ${servo_base_width} ${servo_base_heigth}"/>             
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0"/>
+            <geometry>
+                <box size="${servo_base_length} ${servo_base_width} ${servo_base_heigth}"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_box mass="0.001" x="${servo_base_length}" y="${servo_base_width}" z="${servo_base_heigth}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+    <gazebo reference="servo_base_frame">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+
+
+
+    <joint name="servo_motor_joint" type="continuous">
+        <parent link="servo_base_frame"/>
+        <child link="servo_stick_frame"/>
+        <origin xyz="0 0 ${servo_base_heigth/2 + servo_stick_heigth/2}" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <link name="servo_stick_frame">
+        <visual>
+            <geometry>
+                <!--<mesh filename="file:///$(find turms_description)/mesh/servo/part3.stl" scale ="0.001 0.001 0.001"/> -->
+                <box size="${servo_stick_length} ${servo_stick_width} ${servo_stick_heigth}"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0"/>
+            <geometry>
+                <box size="${servo_stick_length} ${servo_stick_width} ${servo_stick_heigth}"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_box mass="0.001" x="${servo_stick_length}" y="${servo_stick_width}" z="${servo_stick_heigth}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+    <gazebo reference="servo_stick_frame">
+        <material>Gazebo/White</material>
+    </gazebo>
+
+    <!-- ULTRASONIC SENSOR -->
+
+    <joint name="ultrasonic_sensor_joint" type="fixed">
+        <parent link="servo_stick_frame"/>
+        <child link="ultrasonic_sensor_frame"/>
+        <origin xyz="0 0 ${servo_stick_heigth/2 + ultrasonic_sensor_heigth/2}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="ultrasonic_sensor_frame">
+        <visual>
+            <geometry>
+                <!--<mesh filename="file:///$(find turms_description)/mesh/sensors/HC-SR04.stl" scale ="0.001 0.001 0.001"/>   -->  
+                <box size="${ultrasonic_sensor_length} ${ultrasonic_sensor_width} ${ultrasonic_sensor_heigth}"/>           
+            </geometry>
+        </visual>
+        <visual>
+            <origin xyz="${ultrasonic_sensor_length} ${-ultrasonic_sensor_width/4} 0.0" rpy="0 ${pi/2} 0"/>
+            <geometry>
+                <cylinder radius="${ultrasonic_sensor_width/5}" length="${2*ultrasonic_sensor_length}"/>
+            </geometry>
+        </visual>
+        <visual>
+            <origin xyz="${ultrasonic_sensor_length} ${ultrasonic_sensor_width/4}  0.0" rpy="0 ${pi/2} 0"/>
+            <geometry>
+                <cylinder radius="${ultrasonic_sensor_width/5}" length="${2*ultrasonic_sensor_length}"/>
+            </geometry>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0"/>
+            <geometry>
+                <box size="${ultrasonic_sensor_length} ${ultrasonic_sensor_width} ${ultrasonic_sensor_heigth}"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_box mass="0.001" x="${ultrasonic_sensor_length}" y="${ultrasonic_sensor_width}" z="${ultrasonic_sensor_heigth}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+    <gazebo reference="ultrasonic_sensor_frame">
+        <material>Gazebo/Blue</material>
+
+        <sensor name="laser" type="ray">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>1</samples>
+                        <min_angle>-3.14</min_angle>
+                        <max_angle>3.14</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.3</min>
+                    <max>12</max>
+                </range>
+            </ray>
+            <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">
+                <ros>
+                    <argument>~/out:=scan</argument>
+                </ros>
+                <output_type>sensor_msgs/LaserScan</output_type>
+                <frame_name>laser_frame</frame_name>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+</robot>

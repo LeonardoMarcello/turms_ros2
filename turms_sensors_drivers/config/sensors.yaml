@@ -1,0 +1,7 @@
+lidar2d:
+  ros__parameters:
+    frame: "lidar2d"        # frame id used in message header
+    rate: 20.0              # node rate [Hertz]
+    device: "dev/ttyUSB0"   # serial port name
+    baudrate: 57600         # serial port baudrate
+    timeout: 5000           # serial port timeout [ms]
