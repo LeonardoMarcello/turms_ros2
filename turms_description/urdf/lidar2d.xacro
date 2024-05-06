@@ -80,7 +80,7 @@
     <joint name="ultrasonic_sensor_joint" type="fixed">
         <parent link="servo_stick_frame"/>
         <child link="ultrasonic_sensor_frame"/>
-        <origin xyz="0 0 ${servo_stick_heigth/2 + ultrasonic_sensor_heigth/2}" rpy="0 0 0"/>
+        <origin xyz="0 0 ${servo_stick_heigth/2 + ultrasonic_sensor_heigth/2}" rpy="0 0 ${pi}"/>
     </joint>
 
     <link name="ultrasonic_sensor_frame">
@@ -124,14 +124,14 @@
             <ray>
                 <scan>
                     <horizontal>
-                        <samples>1</samples>
-                        <min_angle>-3.14</min_angle>
-                        <max_angle>3.14</max_angle>
+                        <samples>2</samples>
+                        <min_angle>-0.01</min_angle>
+                        <max_angle>0.01</max_angle>
                     </horizontal>
                 </scan>
                 <range>
-                    <min>0.3</min>
-                    <max>12</max>
+                    <min>0.2</min>
+                    <max>50</max>
                 </range>
             </ray>
             <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">
@@ -139,7 +139,7 @@
                     <argument>~/out:=scan</argument>
                 </ros>
                 <output_type>sensor_msgs/LaserScan</output_type>
-                <frame_name>laser_frame</frame_name>
+                <frame_name>ultrasonic_sensor_frame</frame_name>
             </plugin>
         </sensor>
     </gazebo>

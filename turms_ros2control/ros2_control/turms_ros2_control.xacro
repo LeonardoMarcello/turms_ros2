@@ -11,7 +11,7 @@
           <param name="left_wheel_name">left_wheel_joint</param>
           <param name="right_wheel_name">rigth_wheel_joint</param>
           <param name="encoder_ticks">40</param>
-          <param name="servo_name">servo_joint</param>
+          <param name="servo_name">lidar_joint</param>
           <param name="loop_rate">3.0</param>
           <param name="baud_rate">576000</param>
           <param name="timeout_ms">1000</param>
@@ -42,7 +42,7 @@
         <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
-      <joint name="${prefix}servo_joint">
+      <joint name="${prefix}servo_motor_joint">
         <command_interface name="position">
           <param name="min">-90</param>
           <param name="max">90</param>

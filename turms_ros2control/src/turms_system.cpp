@@ -122,6 +122,8 @@ std::vector<hardware_interface::StateInterface> TurmsSystemHardware::export_stat
 
   state_interfaces.emplace_back(hardware_interface::StateInterface(
       servo_.name, hardware_interface::HW_IF_POSITION, &servo_.pos));
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+      servo_.name , "range", &servo_.ping));
 
   return state_interfaces;
 }
@@ -182,13 +184,15 @@ hardware_interface::return_type TurmsSystemHardware::read()
 
   // servo position
   int servo_pos = 0;
-  comms_.read_servo_value(0, servo_pos);
-  servo_.pos = static_cast<double>(servo_pos);
+  float ping = -1;
+  comms_.read_lidar_values(0, servo_pos, ping);                         // read position [degrees] and ping [cm]
+  servo_.pos = static_cast<double>(servo_pos)*M_PI/180.0 - M_PI/2;      // store position [rad]
+  servo_.ping = static_cast<double>(ping/100.0);                        // store ping distance [m]
 
 
   if (cfg_.verbose){
-    RCLCPP_INFO(rclcpp::get_logger("TurmsSystemHardware"), "Reading left wheel pos %d, right wheel pos %d, left wheel vel %.2f, right wheel vel %.2f,  servo pos %.0f",
-      left_wheel_.enc, right_wheel_.enc, left_wheel_.vel, right_wheel_.vel, servo_.pos);
+    RCLCPP_INFO(rclcpp::get_logger("TurmsSystemHardware"), "Reading left wheel pos %d, right wheel pos %d, left wheel vel %.2f, right wheel vel %.2f,  servo pos %.0f, ping %.3f",
+      left_wheel_.enc, right_wheel_.enc, left_wheel_.vel, right_wheel_.vel, servo_.pos*180.0/M_PI, servo_.ping);
   }
 
   
@@ -199,7 +203,7 @@ hardware_interface::return_type turms_ros2control ::TurmsSystemHardware::write()
 {
   int left_wheel_cmd_vel = static_cast<int>(left_wheel_.cmd_vel);
   int right_wheel_cmd_vel = static_cast<int>(right_wheel_.cmd_vel);
-  int servo_cmd_pos = static_cast<int>(servo_.cmd_pos);
+  int servo_cmd_pos = static_cast<int>(servo_.cmd_pos*180/M_PI + 90);
   
   // send commands over serial port
   if (cfg_.verbose){
