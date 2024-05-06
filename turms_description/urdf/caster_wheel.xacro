@@ -42,7 +42,8 @@
 
     <!-- CASTER WHEEL SUPPORT LINK -->
 
-    <joint name="caster_support_joint" type="continuous">
+    <!--joint name="caster_support_joint" type="continuous"-->
+    <joint name="caster_support_joint" type="fixed">
         <parent link="caster_base"/>
         <child link="caster_support"/>
         <origin xyz="0 0 0"/>
@@ -76,7 +77,8 @@
 
     <!-- CASTER WHEEL LINK -->
 
-    <joint name="caster_wheel_joint" type="continuous">
+    <!--joint name="caster_wheel_joint" type="continuous"-->
+    <joint name="caster_wheel_joint" type="fixed">
         <parent link="caster_support"/>
         <child link="caster_wheel"/>
         <origin xyz="-0.03 0 -0.04" rpy="${pi/2} 0 0"/>

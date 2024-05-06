@@ -10,6 +10,7 @@ class Servo
     std::string name = "";
     double cmd_pos = 0;
     double pos = 0;
+    double ping = -1;
 
     Servo() = default;
 

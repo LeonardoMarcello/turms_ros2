@@ -131,8 +131,8 @@ def handle_keypress(event, description_wheels, node):
 def handle_move(slider_servo, node):
     """Move servo accordingly to the slider as button is pressed"""
     pose = Float64MultiArray()
-    #cmd  = float(slider_servo.get()*np.pi/180)
-    cmd  = float(slider_servo.get()+90)
+    cmd  = float(slider_servo.get()*np.pi/180)
+    #cmd  = float(slider_servo.get()+90)
     
     pose.layout.data_offset = 0
     pose.data = [cmd]
@@ -238,7 +238,8 @@ class GUIPublisher(Node):
 
         # setting up publishers
         self.vel_publisher_ = self.create_publisher(Twist, 'diff_controller/cmd_vel_unstamped', 10)
-        self.pos_publisher_ = self.create_publisher(Float64MultiArray, 'servo_controller/commands', 10)
+        self.pos_publisher_ = self.create_publisher(Float64MultiArray, 'lidar_controller/commands', 10)
+        #self.pos_publisher_ = self.create_publisher(Float64MultiArray, 'servo_controller/commands', 10)
 
         # setting up windows event
         self.window.bind("<Key>",lambda event: handle_keypress(event,description_wheels,self))

@@ -12,6 +12,8 @@ find_package(controller_manager REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(hardware REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 
 ## COMPILE
@@ -19,6 +21,7 @@ add_library(
   ${PROJECT_NAME}
   SHARED
   src/turms_system.cpp
+  src/lidar_controller.cpp
   )
 target_include_directories(
     ${PROJECT_NAME}
@@ -41,6 +44,7 @@ target_link_libraries(
 
 # Export hardware plugins
 pluginlib_export_plugin_description_file(hardware_interface turms_ros2control.xml)
+pluginlib_export_plugin_description_file(controller_interface turms_ros2control.xml)
 
 # INSTALL
 install(

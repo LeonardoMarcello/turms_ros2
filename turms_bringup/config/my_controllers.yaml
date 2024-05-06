@@ -6,8 +6,11 @@ controller_manager:
     diff_controller:
       type: diff_drive_controller/DiffDriveController
 
-    servo_controller:
+    servo_controller:                                               # used with sim robot
       type: position_controllers/JointGroupPositionController
+
+    lidar_controller:                                               # used with real robot
+      type: lidar_controllers/LidarController
 
     joint_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
@@ -66,11 +69,25 @@ diff_controller:
     # angular.z.min_jerk: NAN
 
 
-servo_controller:
+servo_controller:           # used with sim robot
   ros__parameters:
 
     joints:
       - servo_motor_joint
 
-# joint_broadcaster:
-#   ros__parameters:
+lidar_controller:          # used with real robot
+  ros__parameters:
+   frame_id: ultrasonic_sensor_frame
+   publish_rate: 5.0      # [Hz]
+   joints:
+     - servo_motor_joint
+   interface_name: position   # servo control type
+   angle_min: -0.01             # start angle of the scan [rad]
+   angle_max: 0.01             # end angle of the scan [rad]
+   angle_increment: 0.02       # angular distance between measurements [rad]
+   time_increment: 1.0        # time between measurements [seconds] - if your scanner
+                              # is moving, this will be used in interpolating position
+                              # of 3d points
+   scan_time: 1.0             # time between scans [seconds]
+   range_min: 13.0            # minimum range value [m]
+   range_max: 0.01            # maximum range value [m]

@@ -76,10 +76,17 @@ def generate_launch_description():
     )
 
     # servo controller node
+    #servo_spawner = Node(
+    #    package="controller_manager",
+    #    executable="spawner.py",
+    #    arguments=["servo_controller"],
+    #)
+
+    # lidar controller node
     servo_spawner = Node(
         package="controller_manager",
         executable="spawner.py",
-        arguments=["servo_controller"],
+        arguments=["lidar_controller"],
     )
 
     delayed_servo_spawner = RegisterEventHandler(
