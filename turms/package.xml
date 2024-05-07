@@ -2,22 +2,19 @@
 <package format="3">
   <name>turms</name>
   <version>1.0.0</version>
-  <description>
-    ROS packages for the Turms (meta package)
-  </description>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="leo@todo.todo">leo</maintainer>
+  <description>ROS packages for the Turms (meta package)</description>
+  <maintainer email="leonardo.marcello_99@hotmail.com">Leonardo Marcello</maintainer>
   <license>TODO: License declaration</license>
+
+
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <exec_depend>turms_bringup</exec_depend>
-  <exec_depend>turms_description</exec_depend>
+  <exec_depend>hardware</exec_depend>
   <exec_depend>turms_msgs</exec_depend>
+  <exec_depend>turms_description</exec_depend>
   <exec_depend>turms_ros2control</exec_depend>
   <exec_depend>turms_navigation</exec_depend>
-  <exec_depend>diff_dive_controller</exec_depend>
-  <exec_depend>hardware</exec_depend>
+  <exec_depend>turms_bringup</exec_depend>
   <exec_depend>gui</exec_depend>
 
   <export><metapackage/></export>

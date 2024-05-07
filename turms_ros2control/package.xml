@@ -2,16 +2,10 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>turms_ros2control</name>
-  <version>0.0.0</version>
-  <description>Demo package of `ros2_control` hardware for DiffBot.</description>
-
-  <maintainer email="denis.stogl@stoglrobotics.de">Dr.-Ing. Denis Štogl</maintainer>
-  <maintainer email="bence.magyar.robotics@gmail.com">Bence Magyar</maintainer>
-  <maintainer email="christoph.froehlich@ait.ac.at">Christoph Froehlich</maintainer>
-
-  <author email="denis.stogl@stoglrobotics.de">Dr.-Ing. Denis Štogl</author>
-
-  <license>Apache-2.0</license>
+  <version>1.0.0</version>
+  <description>This package implement the `ros2_control` hardware for the TURMS bot.</description>
+  <maintainer email="leonardo.marcello_99@hotmail.com">Leonardo Marcello</maintainer>
+  <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
@@ -19,7 +13,7 @@
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
-  <depend>libserial-dev</depend>
+  <depend>hardware</depend>
 
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>diff_drive_controller</exec_depend>

@@ -37,10 +37,10 @@ ament_target_dependencies(
   pluginlib
   hardware
 )
-target_link_libraries(
-  ${PROJECT_NAME}
-  serial
-)
+#target_link_libraries( # <--- remove if possible
+#  ${PROJECT_NAME}
+#  serial
+#)
 
 # Export hardware plugins
 pluginlib_export_plugin_description_file(hardware_interface turms_ros2control.xml)

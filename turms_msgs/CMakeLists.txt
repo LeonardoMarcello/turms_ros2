@@ -29,7 +29,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msgs/Euler.msg"
   "msgs/Obstacle.msg"
   "msgs/Pose.msg"
-  DEPENDENCIES std_msgs geometry_msgs# Add packages that above messages depend on, in this case geometry_msgs for Sphere.msg
+  DEPENDENCIES std_msgs geometry_msgs # Add packages that above messages depend on, in this case geometry_msgs for Sphere.msg
 )
 
 
