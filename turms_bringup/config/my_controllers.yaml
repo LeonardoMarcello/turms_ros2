@@ -89,5 +89,5 @@ lidar_controller:          # used with real robot
                               # is moving, this will be used in interpolating position
                               # of 3d points
    scan_time: 1.0             # time between scans [seconds]
-   range_min: 13.0            # minimum range value [m]
+   range_min: 14.0            # minimum range value [m]
    range_max: 0.01            # maximum range value [m]
