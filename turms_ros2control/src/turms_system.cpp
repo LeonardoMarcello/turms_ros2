@@ -26,84 +26,29 @@
 
 namespace turms_ros2control
 {
-hardware_interface::return_type TurmsSystemHardware::configure(
+hardware_interface::return_type TurmsSystemHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
   RCLCPP_INFO(rclcpp::get_logger("TurmsSystemHardware"), "Configuring hardware interface... please wait...");
-  if (configure_default(info) != hardware_interface::return_type::OK)
-  {
-    return hardware_interface::return_type::ERROR;
-  }
+
   // init comms config
-  cfg_.device = info_.hardware_parameters["device"];
-  cfg_.left_wheel_name = info_.hardware_parameters["left_wheel_name"];
-  cfg_.right_wheel_name = info_.hardware_parameters["right_wheel_name"];
-  cfg_.encoder_ticks = std::stoi(info_.hardware_parameters["encoder_ticks"]);
-  cfg_.servo_name = info_.hardware_parameters["servo_name"];
-  cfg_.loop_rate = std::stof(info_.hardware_parameters["loop_rate"]);
-  cfg_.baud_rate = std::stoi(info_.hardware_parameters["baud_rate"]);
-  cfg_.timeout_ms = std::stoi(info_.hardware_parameters["timeout_ms"]);
-  cfg_.verbose = info_.hardware_parameters["verbose"]=="true";
+  cfg_.device = info.hardware_parameters.at("device");
+  cfg_.left_wheel_name = info.hardware_parameters.at("left_wheel_name");
+  cfg_.right_wheel_name = info.hardware_parameters.at("right_wheel_name");
+  cfg_.encoder_ticks = std::stoi(info.hardware_parameters.at("encoder_ticks"));
+  cfg_.servo_name = info.hardware_parameters.at("servo_name");
+  cfg_.loop_rate = std::stof(info.hardware_parameters.at("loop_rate"));
+  cfg_.baud_rate = std::stoi(info.hardware_parameters.at("baud_rate"));
+  cfg_.timeout_ms = std::stoi(info.hardware_parameters.at("timeout_ms"));
+  cfg_.verbose = info.hardware_parameters.at("verbose")=="true";
   // init state variable
   left_wheel_.setup(cfg_.left_wheel_name, cfg_.encoder_ticks);
   right_wheel_.setup(cfg_.right_wheel_name, cfg_.encoder_ticks);
   servo_.setup(cfg_.servo_name);
 
 
-  // check for proper ros2_control.xacro description
-  /*for (const hardware_interface::ComponentInfo & joint : info_.joints)
-  {
-    // TurmsSystemHardware has exactly two states and one command interface on each joint
-    if (joint.command_interfaces.size() != 1)
-    {
-      RCLCPP_FATAL(
-        rclcpp::get_logger("TurmsSystemHardware"),
-        "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
-        joint.command_interfaces.size());
-      //return hardware_interface::return_type::ERROR;
-    }
-
-    if (joint.command_interfaces[0].name != hardware_interface::HW_IF_VELOCITY)
-    {
-      RCLCPP_FATAL(
-        rclcpp::get_logger("TurmsSystemHardware"),
-        "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
-        joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_VELOCITY);
-      //return hardware_interface::return_type::ERROR;
-    }
-
-    if (joint.state_interfaces.size() != 2)
-    {
-      RCLCPP_FATAL(
-        rclcpp::get_logger("TurmsSystemHardware"),
-        "Joint '%s' has %zu state interface. 2 expected.", joint.name.c_str(),
-        joint.state_interfaces.size());
-      //return hardware_interface::return_type::ERROR;
-    }
-
-    if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION)
-    {
-      RCLCPP_FATAL(
-        rclcpp::get_logger("TurmsSystemHardware"),
-        "Joint '%s' have '%s' as first state interface. '%s' expected.", joint.name.c_str(),
-        joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
-      //return hardware_interface::return_type::ERROR;
-    }
-
-    if (joint.state_interfaces[1].name != hardware_interface::HW_IF_VELOCITY)
-    {
-      RCLCPP_FATAL(
-        rclcpp::get_logger("TurmsSystemHardware"),
-        "Joint '%s' have '%s' as second state interface. '%s' expected.", joint.name.c_str(),
-        joint.state_interfaces[1].name.c_str(), hardware_interface::HW_IF_VELOCITY);
-      //return hardware_interface::return_type::ERROR;
-    }
-  }*/
-
-  status_ = hardware_interface::status::CONFIGURED;
-
   RCLCPP_INFO(rclcpp::get_logger("TurmsSystemHardware"), "Configured");
-  return hardware_interface::return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface> TurmsSystemHardware::export_state_interfaces()
@@ -141,7 +86,7 @@ std::vector<hardware_interface::CommandInterface> TurmsSystemHardware::export_co
   return command_interfaces;
 }
 
-hardware_interface::return_type TurmsSystemHardware::start()
+CallbackReturn TurmsSystemHardware::on_activate(const rclcpp_lifecycle::State & State)
 {
   RCLCPP_INFO(rclcpp::get_logger("TurmsSystemHardware"), "Starting ...please wait...");
   // starting arduino connection
@@ -150,26 +95,24 @@ hardware_interface::return_type TurmsSystemHardware::start()
   }
   catch(const LibSerial::OpenFailed&){
     RCLCPP_ERROR(rclcpp::get_logger("TurmsSystemHardware"), "Cannot open serial port '%s'",cfg_.device.c_str());
-    return hardware_interface::return_type::ERROR;
+    return CallbackReturn::FAILURE;
   }
-  status_ = hardware_interface::status::STARTED;
   RCLCPP_INFO(rclcpp::get_logger("TurmsSystemHardware"), "System Successfully started!");
 
-  return hardware_interface::return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type TurmsSystemHardware::stop()
+CallbackReturn TurmsSystemHardware::on_deactivate(const rclcpp_lifecycle::State & State)
 {
   RCLCPP_INFO(rclcpp::get_logger("TurmsSystemHardware"), "Stopping ...please wait...");
   // discconnecto from arduino
   comms_.disconnect();
-  status_ = hardware_interface::status::STOPPED;
   RCLCPP_INFO(rclcpp::get_logger("TurmsSystemHardware"), "System successfully stopped!");
 
-  return hardware_interface::return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type TurmsSystemHardware::read()
+hardware_interface::return_type TurmsSystemHardware::read(const rclcpp::Time & , const rclcpp::Duration & period)
 {
   // read from serial port
   // encoders ticks
@@ -195,7 +138,7 @@ hardware_interface::return_type TurmsSystemHardware::read()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type turms_ros2control ::TurmsSystemHardware::write()
+hardware_interface::return_type turms_ros2control ::TurmsSystemHardware::write(const rclcpp::Time & , const rclcpp::Duration & period)
 {
   int left_wheel_cmd_vel = static_cast<int>(left_wheel_.cmd_vel);
   int right_wheel_cmd_vel = static_cast<int>(right_wheel_.cmd_vel);

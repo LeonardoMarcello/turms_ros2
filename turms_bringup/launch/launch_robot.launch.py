@@ -64,7 +64,7 @@ def generate_launch_description():
     # diffbot controller node
     diff_drive_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["diff_controller"],
     )
 
@@ -78,7 +78,7 @@ def generate_launch_description():
     # servo controller node
     servo_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["servo_controller"],
     )
 
@@ -92,7 +92,7 @@ def generate_launch_description():
     # joint broadcaster node
     joint_broad_spawner = Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["joint_broadcaster"],
     )
 
