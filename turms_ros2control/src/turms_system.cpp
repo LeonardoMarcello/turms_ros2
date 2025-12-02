@@ -26,7 +26,7 @@
 
 namespace turms_ros2control
 {
-hardware_interface::return_type TurmsSystemHardware::on_init(
+CallbackReturn TurmsSystemHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
   RCLCPP_INFO(rclcpp::get_logger("TurmsSystemHardware"), "Configuring hardware interface... please wait...");
