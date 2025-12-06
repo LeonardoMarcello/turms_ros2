@@ -66,7 +66,7 @@
         <visual>
             <origin xyz="${chassis_length/2} 0 ${chassis_height/2}"/>
             <geometry>
-                <mesh filename="file:///$(find turms_description)/mesh/bases/chassis.stl" scale ="2 2 2"/>
+                <mesh filename="package://turms_description/mesh/bases/chassis.stl" scale ="2 2 2"/>
                 <!--box size="${chassis_length} ${chassis_width} ${chassis_height}"/-->
             </geometry>
             <material name="orange"/>
@@ -99,7 +99,7 @@
         <visual>
             <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
             <geometry>
-                <mesh filename="file:///$(find turms_description)/mesh/wheels/left_tire.stl" scale ="0.0015 0.0015 0.0015"/>
+                <mesh filename="package://turms_description/mesh/wheels/left_tire.stl" scale ="0.0015 0.0015 0.0015"/>
                 <!--cylinder radius="${wheel_radius}" length="${wheel_thickness}"/-->
             </geometry>
             <material name="black"/>
@@ -134,7 +134,7 @@
         <visual>
             <origin xyz="0 0 0" rpy="-${pi/2} 0 0" />
             <geometry>
-                <mesh filename="file:///$(find turms_description)/mesh/wheels/right_tire.stl" scale ="0.0015 0.0015 0.0015"/>
+                <mesh filename="package://turms_description/mesh/wheels/right_tire.stl" scale ="0.0015 0.0015 0.0015"/>
                 <!--cylinder radius="${wheel_radius}" length="${wheel_thickness}"/-->
             </geometry>
             <material name="black"/>
