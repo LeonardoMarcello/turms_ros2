@@ -1,0 +1,20 @@
+rpi_cam:
+  ros__parameters:
+    camera_name: rpi_cam
+    image_width: 640
+    image_height: 480
+    pixel_format: bgr8    #"rgb8"
+                          #"bgr8"
+                          #"yuyv"
+                          #"nv12"
+                          #"mono8"
+
+    framerate: 30.0
+    camera_frame_id: rpi_cam
+    brightness: -1
+    contrast: -1
+    saturation: -1
+    sharpness: -1
+    auto_exposure: true
+    exposure: 100
+    gain: 1.0
