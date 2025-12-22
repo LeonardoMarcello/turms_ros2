@@ -1,0 +1,12 @@
+# Ignore build, install and log directories
+/build/
+/install/
+/log/
+
+# Ignore temporary files
+*.swp
+*~
+
+# Python cache
+__pycache__/
+.pytest_cache/

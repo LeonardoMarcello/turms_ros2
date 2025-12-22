@@ -9,21 +9,32 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
 
-    joy_params = os.path.join(get_package_share_directory('turms_description'),'config','joystick.yaml')
+    joy_params = os.path.join(get_package_share_directory('turms_bringup'),'config','joystick.yaml')
 
     joy_node = Node(
-            package='joy',
-            executable='joy_node',
+            package='joy_linux',
+            executable='joy_linux_node',
             parameters=[joy_params, {'use_sim_time': use_sim_time}],
          )
-
     teleop_node = Node(
-            package='teleop_twist_joy',
-            executable='teleop_node',
-            name='teleop_node',
-            parameters=[joy_params, {'use_sim_time': use_sim_time}],
-            remappings=[('/cmd_vel','/cmd_vel_joy')]
-         )
+            package='gui',
+            executable='joy_controller.py',
+            name='joy_controller',
+        )
+    # teleop_node = Node(
+    #     package='teleop_twist_joy',
+    #     executable='teleop_node',
+    #     name='teleop_node',
+    #     parameters=[joy_params, {'use_sim_time': use_sim_time}],
+    #     remappings=[('/cmd_vel','/cmd_vel_joy')]
+    #     )
+    # teleop_node = Node(
+    #         package='teleop_twist_joy',
+    #         executable='teleop_node',
+    #         name='teleop_node',
+    #         parameters=[joy_params, {'use_sim_time': use_sim_time}],
+    #         remappings=[('/cmd_vel','/cmd_vel_joy')]
+    #      )
 
     # twist_stamper = Node(
     #         package='twist_stamper',
